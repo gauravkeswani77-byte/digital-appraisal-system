@@ -1,0 +1,408 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.app{max-width:700px;margin:0 auto;padding:1.5rem 1rem}
+.tabs{display:flex;gap:4px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem;overflow-x:auto}
+.tab{padding:8px 14px;font-size:13px;border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-family:var(--font-sans)}
+.tab.active{color:var(--color-text-primary);border-bottom:2px solid #534AB7;font-weight:500}
+.section{display:none}.section.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.card-title{font-size:14px;font-weight:500;margin-bottom:0.75rem;color:var(--color-text-primary)}
+.badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:var(--border-radius-md);font-weight:500}
+.badge-purple{background:#EEEDFE;color:#3C3489}
+.badge-teal{background:#E1F5EE;color:#0F6E56}
+.badge-amber{background:#FAEEDA;color:#633806}
+.badge-coral{background:#FAECE7;color:#993C1D}
+.badge-green{background:#EAF3DE;color:#3B6D11}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:0.75rem;text-align:center}
+.metric-val{font-size:22px;font-weight:500;color:var(--color-text-primary)}
+.metric-lbl{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.skill-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.skill-name{font-size:13px;color:var(--color-text-secondary);min-width:140px;flex-shrink:0}
+.bar-track{flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+.bar-purple{background:#534AB7}
+.bar-teal{background:#1D9E75}
+.bar-amber{background:#BA7517}
+.bar-coral{background:#D85A30}
+.bar-blue{background:#378ADD}
+.score-lbl{font-size:12px;font-weight:500;min-width:28px;text-align:right;color:var(--color-text-primary)}
+.rating-group{margin-bottom:1.25rem}
+.rating-label{font-size:13px;font-weight:500;margin-bottom:6px;color:var(--color-text-primary)}
+.rating-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
+.stars{display:flex;gap:6px}
+.star{width:28px;height:28px;cursor:pointer;border-radius:4px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--color-text-secondary);transition:background 0.15s}
+.star.active{background:#534AB7;color:#fff;border-color:#534AB7}
+.goal-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.goal-item:last-child{border-bottom:none}
+.goal-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+.goal-check.done{background:#1D9E75;border-color:#1D9E75;color:#fff}
+.goal-text{font-size:13px;color:var(--color-text-primary);flex:1}
+.goal-tag{font-size:11px;color:var(--color-text-secondary)}
+.progress-ring{position:relative;width:72px;height:72px;flex-shrink:0}
+.progress-ring svg{transform:rotate(-90deg)}
+.progress-ring .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500}
+.feedback-bubble{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:0.75rem 1rem;margin-bottom:0.75rem;font-size:13px;color:var(--color-text-primary);line-height:1.6;border-left:3px solid #534AB7}
+.feedback-meta{font-size:12px;color:var(--color-text-secondary);margin-top:5px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-primary);cursor:pointer;font-family:var(--font-sans)}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-primary{background:#534AB7;border-color:#534AB7;color:#fff}
+.btn-primary:hover{background:#3C3489}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.section-title{font-size:16px;font-weight:500}
+.employee-info{display:flex;align-items:center;gap:12px;padding:0.75rem 0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1rem}
+.avatar{width:40px;height:40px;border-radius:50%;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px;color:#3C3489;flex-shrink:0}
+.emp-name{font-size:14px;font-weight:500}
+.emp-role{font-size:12px;color:var(--color-text-secondary)}
+.timeline{position:relative;padding-left:20px}
+.timeline::before{content:'';position:absolute;left:6px;top:4px;bottom:4px;width:1px;background:var(--color-border-tertiary)}
+.t-item{position:relative;margin-bottom:1rem;padding-left:12px}
+.t-item::before{content:'';position:absolute;left:-14px;top:4px;width:8px;height:8px;border-radius:50%;background:#534AB7;border:2px solid var(--color-background-primary)}
+.t-item.pending::before{background:var(--color-border-secondary)}
+.t-label{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.t-date{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.status-pill{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.pill-active{background:#E1F5EE;color:#0F6E56}
+.pill-pending{background:#FAEEDA;color:#633806}
+.pill-done{background:#EEEDFE;color:#3C3489}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:480px){.two-col{grid-template-columns:1fr}}
+textarea{width:100%;min-height:70px;padding:8px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);resize:vertical;margin-top:6px}
+select{padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary)}
+</style>
+
+<h2 class="sr-only">Digital Performance Appraisal System — interactive prototype with dashboard, skill ratings, goal tracking, 360 feedback, and appraisal timeline modules</h2>
+
+<div class="app">
+  <div style="margin-bottom:1.25rem">
+    <div style="font-size:18px;font-weight:500;margin-bottom:4px">Performance appraisal system</div>
+    <div style="font-size:13px;color:var(--color-text-secondary)">FY 2025–26 · Mid-year review cycle</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('dashboard')">Dashboard</button>
+    <button class="tab" onclick="showTab('skills')">Skill ratings</button>
+    <button class="tab" onclick="showTab('goals')">Goals & OKRs</button>
+    <button class="tab" onclick="showTab('feedback')">360° feedback</button>
+    <button class="tab" onclick="showTab('timeline')">Appraisal cycle</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard" class="section active">
+    <div class="employee-info">
+      <div class="avatar">AR</div>
+      <div>
+        <div class="emp-name">Aryan Rao &nbsp;<span class="status-pill pill-active">Review in progress</span></div>
+        <div class="emp-role">Senior HR Business Partner · Bangalore · Joined Jun 2022</div>
+      </div>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric"><div class="metric-val">78<span style="font-size:14px">%</span></div><div class="metric-lbl">Overall score</div></div>
+      <div class="metric"><div class="metric-val">4/6</div><div class="metric-lbl">Goals met</div></div>
+      <div class="metric"><div class="metric-val">4.1</div><div class="metric-lbl">Peer rating</div></div>
+      <div class="metric"><div class="metric-val">82<span style="font-size:14px">%</span></div><div class="metric-lbl">Learning hrs</div></div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">Competency summary</div>
+        <div class="skill-row"><span class="skill-name">Data-driven HR</span><div class="bar-track"><div class="bar-fill bar-purple" style="width:82%"></div></div><span class="score-lbl">82</span></div>
+        <div class="skill-row"><span class="skill-name">People analytics</span><div class="bar-track"><div class="bar-fill bar-teal" style="width:74%"></div></div><span class="score-lbl">74</span></div>
+        <div class="skill-row"><span class="skill-name">DEI leadership</span><div class="bar-track"><div class="bar-fill bar-blue" style="width:88%"></div></div><span class="score-lbl">88</span></div>
+        <div class="skill-row"><span class="skill-name">AI fluency</span><div class="bar-track"><div class="bar-fill bar-amber" style="width:61%"></div></div><span class="score-lbl">61</span></div>
+        <div class="skill-row"><span class="skill-name">Change management</span><div class="bar-track"><div class="bar-fill bar-coral" style="width:79%"></div></div><span class="score-lbl">79</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Development flags</div>
+        <div style="margin-bottom:10px"><span class="badge badge-amber">Upskill</span><div style="font-size:13px;margin-top:5px;color:var(--color-text-primary)">AI tools for HR (ChatHR, Workday AI)</div><div style="font-size:12px;color:var(--color-text-secondary)">Market demand: high · Score gap: 19pts</div></div>
+        <div style="margin-bottom:10px"><span class="badge badge-green">Strength</span><div style="font-size:13px;margin-top:5px;color:var(--color-text-primary)">DEI program design</div><div style="font-size:12px;color:var(--color-text-secondary)">Top 15% in cohort</div></div>
+        <div><span class="badge badge-purple">Emerging</span><div style="font-size:13px;margin-top:5px;color:var(--color-text-primary)">People analytics & dashboards</div><div style="font-size:12px;color:var(--color-text-secondary)">Growing fast in HRBP roles</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recommended learning paths <span style="font-weight:400;font-size:12px;color:var(--color-text-secondary)">based on 2025 market demand</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="badge badge-purple">HR analytics (Coursera)</span>
+        <span class="badge badge-teal">Workday HCM certification</span>
+        <span class="badge badge-amber">Generative AI for HR</span>
+        <span class="badge badge-coral">Strategic workforce planning</span>
+        <span class="badge badge-green">Compensation benchmarking</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:0.5rem">
+      <button class="btn" onclick="sendPrompt('Explain each recommended learning path for HR professionals in 2025 and why they matter')">Explain learning paths ↗</button>
+    </div>
+  </div>
+
+  <!-- SKILL RATINGS -->
+  <div id="tab-skills" class="section">
+    <div class="section-header"><span class="section-title">Skill & competency ratings</span><select id="rater-type"><option>Self assessment</option><option>Manager</option><option>Peer</option></select></div>
+
+    <div class="card">
+      <div class="card-title">Core HR competencies</div>
+      <div class="rating-group">
+        <div class="rating-label">Strategic HR thinking</div>
+        <div class="rating-sub">Ability to align people strategy with business goals</div>
+        <div class="stars" data-key="s1">
+          <div class="star active" onclick="rate('s1',1)">1</div>
+          <div class="star active" onclick="rate('s1',2)">2</div>
+          <div class="star active" onclick="rate('s1',3)">3</div>
+          <div class="star active" onclick="rate('s1',4)">4</div>
+          <div class="star" onclick="rate('s1',5)">5</div>
+        </div>
+      </div>
+      <div class="rating-group">
+        <div class="rating-label">People analytics</div>
+        <div class="rating-sub">Using data to make evidence-based HR decisions</div>
+        <div class="stars" data-key="s2">
+          <div class="star active" onclick="rate('s2',1)">1</div>
+          <div class="star active" onclick="rate('s2',2)">2</div>
+          <div class="star active" onclick="rate('s2',3)">3</div>
+          <div class="star" onclick="rate('s2',4)">4</div>
+          <div class="star" onclick="rate('s2',5)">5</div>
+        </div>
+      </div>
+      <div class="rating-group">
+        <div class="rating-label">AI & HR tech fluency</div>
+        <div class="rating-sub">Proficiency with AI-powered HRMS, ATS, and automation tools</div>
+        <div class="stars" data-key="s3">
+          <div class="star active" onclick="rate('s3',1)">1</div>
+          <div class="star active" onclick="rate('s3',2)">2</div>
+          <div class="star active" onclick="rate('s3',3)">3</div>
+          <div class="star" onclick="rate('s3',4)">4</div>
+          <div class="star" onclick="rate('s3',5)">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Future-ready skills <span class="badge badge-amber" style="margin-left:6px">2025 market demand</span></div>
+      <div class="rating-group">
+        <div class="rating-label">Change & transformation management</div>
+        <div class="rating-sub">Leading org-level change initiatives and culture shifts</div>
+        <div class="stars" data-key="s4">
+          <div class="star active" onclick="rate('s4',1)">1</div>
+          <div class="star active" onclick="rate('s4',2)">2</div>
+          <div class="star active" onclick="rate('s4',3)">3</div>
+          <div class="star active" onclick="rate('s4',4)">4</div>
+          <div class="star" onclick="rate('s4',5)">5</div>
+        </div>
+      </div>
+      <div class="rating-group">
+        <div class="rating-label">DEI & belonging</div>
+        <div class="rating-sub">Designing inclusive policies and measurable DEI programs</div>
+        <div class="stars" data-key="s5">
+          <div class="star active" onclick="rate('s5',1)">1</div>
+          <div class="star active" onclick="rate('s5',2)">2</div>
+          <div class="star active" onclick="rate('s5',3)">3</div>
+          <div class="star active" onclick="rate('s5',4)">4</div>
+          <div class="star active" onclick="rate('s5',5)">5</div>
+        </div>
+      </div>
+      <div class="rating-group">
+        <div class="rating-label">Employee experience design</div>
+        <div class="rating-sub">Journey mapping, EX score improvement, hybrid work enablement</div>
+        <div class="stars" data-key="s6">
+          <div class="star active" onclick="rate('s6',1)">1</div>
+          <div class="star active" onclick="rate('s6',2)">2</div>
+          <div class="star active" onclick="rate('s6',3)">3</div>
+          <div class="star" onclick="rate('s6',4)">4</div>
+          <div class="star" onclick="rate('s6',5)">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn" onclick="sendPrompt('What does each skill in the HR competency framework mean and how is it measured?')">About these skills ↗</button>
+      <button class="btn btn-primary" onclick="alert('Ratings saved!')">Save ratings</button>
+    </div>
+  </div>
+
+  <!-- GOALS -->
+  <div id="tab-goals" class="section">
+    <div class="section-header"><span class="section-title">Goals & OKRs</span><span class="badge badge-teal">4 of 6 complete</span></div>
+
+    <div class="card">
+      <div class="card-title">Organisational OKR alignment</div>
+      <div class="goal-item">
+        <div class="goal-check done" onclick="toggleGoal(this)">✓</div>
+        <div style="flex:1">
+          <div class="goal-text">Reduce time-to-hire by 25% using AI-assisted screening</div>
+          <div class="goal-tag">Key result · Q1 target · <strong style="color:#1D9E75">Achieved</strong></div>
+          <div style="margin-top:6px"><div class="bar-track" style="height:5px"><div class="bar-fill bar-teal" style="width:100%"></div></div></div>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-check done" onclick="toggleGoal(this)">✓</div>
+        <div style="flex:1">
+          <div class="goal-text">Launch employee wellness dashboard with 80% adoption rate</div>
+          <div class="goal-tag">Strategic initiative · Q2 target · <strong style="color:#1D9E75">Achieved</strong></div>
+          <div style="margin-top:6px"><div class="bar-track" style="height:5px"><div class="bar-fill bar-teal" style="width:100%"></div></div></div>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-check done" onclick="toggleGoal(this)">✓</div>
+        <div style="flex:1">
+          <div class="goal-text">Complete DEI baseline survey and publish action plan</div>
+          <div class="goal-tag">DEI pillar · Q1 · <strong style="color:#1D9E75">Achieved</strong></div>
+          <div style="margin-top:6px"><div class="bar-track" style="height:5px"><div class="bar-fill bar-teal" style="width:100%"></div></div></div>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-check done" onclick="toggleGoal(this)">✓</div>
+        <div style="flex:1">
+          <div class="goal-text">Train 3 junior HR associates on Workday analytics module</div>
+          <div class="goal-tag">L&D contribution · Q2 · <strong style="color:#1D9E75">Achieved</strong></div>
+          <div style="margin-top:6px"><div class="bar-track" style="height:5px"><div class="bar-fill bar-teal" style="width:83%"></div></div></div>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-check" onclick="toggleGoal(this)"></div>
+        <div style="flex:1">
+          <div class="goal-text">Implement continuous feedback tool (replace annual cycle)</div>
+          <div class="goal-tag">Process transformation · Q3 · <strong style="color:#BA7517">In progress — 65%</strong></div>
+          <div style="margin-top:6px"><div class="bar-track" style="height:5px"><div class="bar-fill bar-amber" style="width:65%"></div></div></div>
+        </div>
+      </div>
+      <div class="goal-item">
+        <div class="goal-check" onclick="toggleGoal(this)"></div>
+        <div style="flex:1">
+          <div class="goal-text">Build predictive attrition model with data science team</div>
+          <div class="goal-tag">People analytics · Q4 · <strong style="color:#D85A30">Not started</strong></div>
+          <div style="margin-top:6px"><div class="bar-track" style="height:5px"><div class="bar-fill bar-coral" style="width:0%"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <button class="btn" onclick="sendPrompt('How should an HRBP structure SMART goals aligned to business OKRs for a performance appraisal?')">How to write better OKRs ↗</button>
+    </div>
+  </div>
+
+  <!-- FEEDBACK -->
+  <div id="tab-feedback" class="section">
+    <div class="section-header"><span class="section-title">360° feedback</span><span class="badge badge-purple">5 responses received</span></div>
+
+    <div class="card">
+      <div class="card-title">Received feedback</div>
+      <div class="feedback-bubble">
+        Strong strategic thinking. Aryan connected the hiring freeze data to business velocity metrics during Q1 planning — showed real maturity in commercial HR partnership.
+        <div class="feedback-meta">Manager · Confidential · Submitted Apr 2026</div>
+      </div>
+      <div class="feedback-bubble" style="border-left-color:#1D9E75">
+        Great collaborator on the DEI audit. Very thorough with data collection and handled sensitive interviews with empathy. Should consider leading the next full survey independently.
+        <div class="feedback-meta">Peer · HR Operations · Submitted Apr 2026</div>
+      </div>
+      <div class="feedback-bubble" style="border-left-color:#BA7517">
+        Communication on project timelines could improve — sometimes updates come late. Otherwise a reliable point of contact for employee relations issues.
+        <div class="feedback-meta">Internal stakeholder · Finance · Submitted Mar 2026</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Give feedback on a colleague</div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:13px;color:var(--color-text-secondary)">Colleague name</label>
+        <input type="text" placeholder="Start typing a name..." style="width:100%;margin-top:5px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary)">
+      </div>
+      <div style="margin-bottom:10px">
+        <label style="font-size:13px;color:var(--color-text-secondary)">Feedback area</label><br>
+        <select style="margin-top:5px;width:100%">
+          <option>Collaboration & teamwork</option>
+          <option>Communication skills</option>
+          <option>Technical/domain expertise</option>
+          <option>Leadership & initiative</option>
+          <option>DEI contribution</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:13px;color:var(--color-text-secondary)">Your feedback (anonymous)</label>
+        <textarea placeholder="Be specific — share an example of a situation, the behaviour you observed, and its impact..."></textarea>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:flex-end;gap:8px">
+        <button class="btn" onclick="sendPrompt('Give me tips on writing constructive, bias-free 360 feedback for colleagues')">Tips for good feedback ↗</button>
+        <button class="btn btn-primary" onclick="alert('Feedback submitted anonymously!')">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div id="tab-timeline" class="section">
+    <div class="section-header"><span class="section-title">Appraisal cycle timeline</span><span class="badge badge-teal">Mid-year 2026</span></div>
+
+    <div class="card">
+      <div class="card-title">Cycle overview</div>
+      <div class="timeline">
+        <div class="t-item">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Goal setting & calibration</span><span class="status-pill pill-done">Done</span></div>
+          <div class="t-date">Jan 2026 — Manager & employee co-create goals aligned to BU OKRs</div>
+        </div>
+        <div class="t-item">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Continuous check-ins</span><span class="status-pill pill-done">Done</span></div>
+          <div class="t-date">Feb–Mar 2026 — Monthly 1:1s logged in system with notes & flags</div>
+        </div>
+        <div class="t-item">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Self assessment</span><span class="status-pill pill-active">Active</span></div>
+          <div class="t-date">Apr 1–15 2026 — Employee rates skills, reviews goals, submits narrative</div>
+        </div>
+        <div class="t-item">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">360° feedback collection</span><span class="status-pill pill-active">Active</span></div>
+          <div class="t-date">Apr 1–20 2026 — Peers, stakeholders, manager submit structured feedback</div>
+        </div>
+        <div class="t-item pending">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Manager review & rating</span><span class="status-pill pill-pending">Upcoming</span></div>
+          <div class="t-date">Apr 21–30 2026 — Manager calibrates against team, assigns final scores</div>
+        </div>
+        <div class="t-item pending">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Calibration committee</span><span class="status-pill pill-pending">Upcoming</span></div>
+          <div class="t-date">May 5 2026 — HR leads consistency check across departments</div>
+        </div>
+        <div class="t-item pending">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Appraisal conversation & IDP</span><span class="status-pill pill-pending">Upcoming</span></div>
+          <div class="t-date">May 12–20 2026 — Formal discussion, IDP creation, comp linkage</div>
+        </div>
+        <div class="t-item pending">
+          <div style="display:flex;align-items:center;justify-content:space-between"><span class="t-label">Rewards & recognition</span><span class="status-pill pill-pending">Upcoming</span></div>
+          <div class="t-date">Jun 1 2026 — Salary revision, promotions, L&D budget allocation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Anti-bias safeguards built into this system</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-purple">Recency bias</span><span style="font-size:13px;color:var(--color-text-secondary)">System logs full-year contributions, not just recent quarter</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-teal">Halo effect</span><span style="font-size:13px;color:var(--color-text-secondary)">Competencies rated independently; no global rating until all scores entered</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-amber">Affinity bias</span><span style="font-size:13px;color:var(--color-text-secondary)">Calibration committee reviews scores across demographic groups</span></div>
+        <div style="display:flex;gap:10px;align-items:flex-start"><span class="badge badge-coral">Leniency bias</span><span style="font-size:13px;color:var(--color-text-secondary)">Forced distribution guidelines shown to managers during rating</span></div>
+      </div>
+    </div>
+
+    <div style="text-align:center">
+      <button class="btn" onclick="sendPrompt('Explain how a digital performance appraisal system reduces bias compared to traditional methods, with academic references')">How this reduces bias ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['dashboard','skills','goals','feedback','timeline'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+}
+function rate(key,val){
+  const group=document.querySelector('.stars[data-key="'+key+'"]');
+  group.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<val));
+}
+function toggleGoal(el){
+  el.classList.toggle('done');
+  el.textContent=el.classList.contains('done')?'✓':'';
+}
+</script>
